@@ -8,4 +8,4 @@
 -- ╚══════╝╚═╝░░╚══╝╚═════╝░╚══════╝╚═╝░░╚═╝  ╚═╝░░╚═╝░╚═════╝░╚═════╝░
 
 -- this file was generated using ironbrew1
-loadstring(game:HttpGet("https://pandadevelopment.net/virtual/file/9cbbea93f20cb6ac"))()
+loadstring(game:HttpGet("https://pandadevelopment.net/virtual/file/05458c312426b5cd"))()
