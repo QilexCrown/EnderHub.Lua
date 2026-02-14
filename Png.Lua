@@ -3,16 +3,14 @@
    Ender Hub  Png Loader
 
 ]]
-local PNG = {}
-PNG.__index = PNG
+local PngBuilder = {}
+PngBuilder.__index = PngBuilder
 
-function PNG.new(data)
-    local self = setmetatable({}, PNG)
+function PngBuilder.new(data)
+    local self = setmetatable({}, PngBuilder)
     
     self.Width = 0
     self.Height = 0
-    self.Depth = 8
-    self.ColorType = 2
     self.Pixels = {}
     
     if data then
@@ -22,7 +20,7 @@ function PNG.new(data)
     return self
 end
 
-function PNG:Decode(data)
+function PngBuilder:Decode(data)
     if string.sub(data, 1, 8) ~= string.char(137, 80, 78, 71, 13, 10, 26, 10) then
         error("Invalid PNG file")
     end
@@ -35,8 +33,6 @@ function PNG:Decode(data)
         if chunkType == "IHDR" then
             self.Width = string.byte(data, pos + 8) * 16777216 + string.byte(data, pos + 9) * 65536 + string.byte(data, pos + 10) * 256 + string.byte(data, pos + 11)
             self.Height = string.byte(data, pos + 12) * 16777216 + string.byte(data, pos + 13) * 65536 + string.byte(data, pos + 14) * 256 + string.byte(data, pos + 15)
-            self.Depth = string.byte(data, pos + 16)
-            self.ColorType = string.byte(data, pos + 17)
             break
         end
         
@@ -51,12 +47,7 @@ function PNG:Decode(data)
     for y = 0, self.Height - 1 do
         self.Pixels[y] = {}
         for x = 0, self.Width - 1 do
-            self.Pixels[y][x] = {
-                R = 255,
-                G = 255,
-                B = 255,
-                A = 255
-            }
+            self.Pixels[y][x] = {R = 255, G = 255, B = 255, A = 255}
         end
     end
     
@@ -73,7 +64,7 @@ function PNG:Decode(data)
     end
 end
 
-function PNG:GetPixel(x, y)
+function PngBuilder:GetPixel(x, y)
     x = math.clamp(x, 0, self.Width - 1)
     y = math.clamp(y, 0, self.Height - 1)
     
@@ -84,7 +75,7 @@ function PNG:GetPixel(x, y)
     return 255, 255, 255, 255
 end
 
-function PNG:GetPixelRGBA(x, y)
+function PngBuilder:GetPixelRGBA(x, y)
     x = math.clamp(x, 0, self.Width - 1)
     y = math.clamp(y, 0, self.Height - 1)
     
@@ -94,3 +85,5 @@ function PNG:GetPixelRGBA(x, y)
     
     return {R = 255, G = 255, B = 255, A = 255}
 end
+
+return PngBuilder
