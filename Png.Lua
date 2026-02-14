@@ -25,8 +25,24 @@ function PNG:Decode(data)
         error("Invalid PNG file")
     end
     
-    self.Width = 16
-    self.Height = 16
+    local pos = 9
+    while pos < #data do
+        local length = string.byte(data, pos) * 16777216 + string.byte(data, pos + 1) * 65536 + string.byte(data, pos + 2) * 256 + string.byte(data, pos + 3)
+        local chunkType = string.sub(data, pos + 4, pos + 7)
+        
+        if chunkType == "IHDR" then
+            self.Width = string.byte(data, pos + 8) * 16777216 + string.byte(data, pos + 9) * 65536 + string.byte(data, pos + 10) * 256 + string.byte(data, pos + 11)
+            self.Height = string.byte(data, pos + 12) * 16777216 + string.byte(data, pos + 13) * 65536 + string.byte(data, pos + 14) * 256 + string.byte(data, pos + 15)
+            break
+        end
+        
+        pos = pos + length + 12
+    end
+    
+    if self.Width == 0 then
+        self.Width = 16
+        self.Height = 16
+    end
     
     for y = 0, self.Height - 1 do
         self.Pixels[y] = {}
