@@ -1,3 +1,7 @@
+--[[
+    Ender Hub Png Libary Modules
+]]
+-- chunktypes not by me by @MaximumADHD
 local PNG = {}
 
 do
